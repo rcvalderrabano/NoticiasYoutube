@@ -1,0 +1,40 @@
+name: Slack Notification
+
+on:
+  push:
+  pull_request:
+  issues:
+    types:
+      - opened
+      - closed
+      - reopened
+      - edited
+      - deleted
+      - pinned
+      - unpinned
+      - assigned
+      - unassigned
+      - labeled
+      - unlabeled
+      - milestoned
+      - demilestoned
+  issue_comment:
+    types:
+      - created
+      - edited
+      - deleted
+  create:
+  delete:
+
+jobs:
+  notify_slack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: repo,commit,event,action,workflow,ref,URL
+
